@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="JS/jquery-1.8.2.js"></script>
+    <script src="JS/jquery-1.8.2.min.js"></script>
+
+    <script>
+      var employeelist = [];
+      var i = 0;
+
+      function searchRec() {
+        $("#main").show();
+        $("#addrec").hide();
+      }
+
+      function addRec() {
+        $("#main").hide();
+        $("#addrec").show();
+      }
+
+      function displayRec() {
+        $("#addrec").hide();
+        $("#grid").show();
+
+        var mtable = document.getElementById("mtable");
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+
+        mtable.innerHTML = "";
+
+        var employee = { name: name, email: email };
+        console.log(employee);
+        var emp = JSON.stringify(employee);
+
+        // Start JSON With AJAX
+        $.ajax({
+          url: "http://localhost/json/getCustomer3.php",
+          contentType: "application/json",
+          dataType: "json",
+          data: { emp },
+          method: "GET",
+        })
+          .done(function (data, status) {
+            if (status == "success") {
+              if (data.length > 0) {
+                employeelist = data;
+
+                for (var i = 0; i <= data.length; i++) {
+                  mtable.innerHTML +=
+                    "<tr><td>" +
+                    data[i].customerName +
+                    "</td><td>" +
+                    data[i].email +
+                    "</td><td>" +
+                    data[i].phone +
+                    "</td><td>" +
+                    data[i].addressLine1 +
+                    "</td><td><input type='button' onclick='editRec(" +
+                    i +
+                    ")' value='Edit Record'></td></tr>";
+                }
+              } else {
+                alert("No data exist");
+              }
+            }
+          })
+          .fail(function () {
+            alert("Authentication Error");
+          });
+
+        // $.ajax({
+        //     url: "http://localhost/json/getCustomer3.php",
+        //     contentType: "application/json", // php://input
+        //     dataType: "json",
+        //     data: {emp},
+        //     method: "GET"
+        //        }).done(function (data, status)
+        //        {
+        //         console.log(data);
+        //         console.log(status);
+        //          if (status == "success")
+        //           {
+        //            if (data.length > 0)
+        //            {
+
+        //             employeelist=data;
+
+        //             for(var i=0; i<=data.length; i++)
+        //             {
+        //                mtable.innerHTML += "<tr><td>"+data[i].customerName+"</td><td>"+data[i].email+"</td><td>"+data[i].phone+"</td><td>"+data[i].addressLine1+"</td><td><input type='button' onclick='EditRec("+i+")' value='Edit Record'></td></tr>";
+        //             }
+
+        //             }
+        //            else
+        //            {
+        //             alert("No data exist");
+        //            }
+        //           }
+        //          }).fail(function ()
+        //            {
+        //              alert("Authentication Error");
+        //            });
+      }
+
+      function editRec(){
+
+        $("#main").hide();
+        $("#addrec").hide();
+        $("#editrec").show();
+
+        var 
+
+
+
+      }
+
+
+
+    </script>
+  </head>
+  <body>
+    <input type="button" value="Add Record" onclick="addRec()" />
+    <input type="button" value="Search Record" onclick="searchRec()" />
+
+    <div id="main" style="display: none">
+      <table>
+        <tr>
+          <td>Enter Name</td>
+          <td><input type="text" id="name" placeholder="Enter name" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Email</td>
+          <td><input type="text" id="email" placeholder="Enter email" /></td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="button" value="Search" onclick="displayRec()" />
+          </td>
+        </tr>
+      </table>
+
+      <div id="grid" style="display: none">
+        <table id="mtable">
+          <tr>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Phone No</td>
+            <td>Address</td>
+            <td>Edit/Delete</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="addrec" style="display: none">
+      <table>
+        <tr>
+          <td><span id="addid"></span></td>
+          <td><span id="addmsg"></span></td>
+        </tr>
+
+        <tr>
+          <td>Enter Name</td>
+          <td><input type="text" id="cname" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Email</td>
+          <td><input type="email" id="cemail" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Password</td>
+          <td><input type="password" id="cpwd" /></td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="button" value="Save Record" onclick="saveRec()" />
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="editrec" style="display: none">
+      <table>
+        <tr>
+          <td><span id="editid"></span></td>
+          <td><span id="editmsg"></span></td>
+        </tr>
+
+        <tr>
+          <td>Customer ID</td>
+          <td><input type="text" id="customer_id" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Name</td>
+          <td><input type="text" id="customer_name" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Email</td>
+          <td><input type="email" id="customer_email" /></td>
+        </tr>
+
+        <tr>
+          <td>Enter Password</td>
+          <td><input type="password" id="customer_pwd" /></td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="button" value="Update Record" onclick="updateRec()" />
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
